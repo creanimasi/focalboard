@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"path"
 	"reflect"
+	"strings"
 	"time"
 
 	mmModel "github.com/mattermost/mattermost/server/public/model"
@@ -122,6 +123,54 @@ func DedupeStringArr(arr []string) []string {
 	return dedupedArr
 }
 
+// GetBaseFilePath returns the base path for file storage
+// Legacy function - kept for compatibility
 func GetBaseFilePath() string {
 	return path.Join("boards", time.Now().Format("20060102"))
+}
+
+// SanitizePathName removes or replaces characters not allowed in folder names
+// and limits the length to prevent filesystem issues
+func SanitizePathName(name string) string {
+	if name == "" {
+		return "Untitled"
+	}
+	
+	// Replace problematic characters with underscores
+	replacer := strings.NewReplacer(
+		"/", "_",
+		"\\", "_",
+		":", "_",
+		"*", "_",
+		"?", "_",
+		"\"", "_",
+		"<", "_",
+		">", "_",
+		"|", "_",
+		" ", "_",
+		".", "_",
+	)
+	
+	cleaned := replacer.Replace(name)
+	
+	// Remove leading/trailing underscores
+	cleaned = strings.Trim(cleaned, "_")
+	
+	// Limit length to 50 characters to prevent path issues
+	if len(cleaned) > 50 {
+		cleaned = cleaned[:50]
+	}
+	
+	if cleaned == "" {
+		return "Untitled"
+	}
+	
+	return cleaned
+}
+
+// GetCustomFilePath returns organized file path: boards/[BoardName]/[Date]/
+func GetCustomFilePath(boardTitle string) string {
+	safeBoardName := SanitizePathName(boardTitle)
+	dateStr := time.Now().Format("20060102")
+	return path.Join("boards", safeBoardName, dateStr)
 }

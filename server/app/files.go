@@ -32,7 +32,21 @@ func (a *App) SaveFile(reader io.Reader, teamID, boardID, filename string, asTem
 	if asTemplate {
 		newFileName = filename
 	}
-	filePath := getDestinationFilePath(asTemplate, teamID, boardID, newFileName)
+	
+	// Get board info for custom path
+	var filePath string
+	if asTemplate {
+		filePath = getDestinationFilePath(asTemplate, teamID, boardID, "", newFileName)
+	} else {
+		board, err := a.GetBoard(boardID)
+		if err != nil || board == nil {
+			// Fallback to default path if board not found
+			filePath = getDestinationFilePath(asTemplate, teamID, boardID, "", newFileName)
+		} else {
+			// Use board title for organized storage
+			filePath = getDestinationFilePath(asTemplate, teamID, boardID, board.Title, newFileName)
+		}
+	}
 
 	fileSize, appErr := a.filesBackend.WriteFile(reader, filePath)
 	if appErr != nil {
@@ -113,13 +127,20 @@ func (a *App) GetFilePath(teamID, rootID, fileName string) (*mm_model.FileInfo, 
 	return fileInfo, filePath, nil
 }
 
-func getDestinationFilePath(isTemplate bool, teamID, boardID, filename string) string {
+func getDestinationFilePath(isTemplate bool, teamID, boardID, boardTitle, filename string) string {
 	// if saving a file for a template, save using the "old method" that is /teamID/boardID/fileName
 	// this will prevent template files from being deleted by DataRetention,
 	// which deletes all files inside the "date" subdirectory
 	if isTemplate {
 		return filepath.Join(teamID, boardID, filename)
 	}
+	
+	// Use custom organized path: boards/[BoardName]/[Date]/filename
+	if boardTitle != "" {
+		return filepath.Join(utils.GetCustomFilePath(boardTitle), filename)
+	}
+	
+	// Fallback to default path
 	return filepath.Join(utils.GetBaseFilePath(), filename)
 }
 
@@ -268,7 +289,7 @@ func (a *App) CopyCardFiles(sourceBoardID string, copiedBlocks []*model.Block, a
 		if err != nil {
 			return nil, fmt.Errorf("cannot fetch destination board %s for CopyCardFiles: %w", sourceBoardID, err)
 		}
-		destinationFilePath := getDestinationFilePath(asTemplate, destBoard.TeamID, destBoard.ID, destFilename)
+		destinationFilePath := getDestinationFilePath(asTemplate, destBoard.TeamID, destBoard.ID, destBoard.Title, destFilename)
 
 		if fileInfo == nil {
 			fileInfo = model.NewFileInfo(destFilename)
