@@ -17,6 +17,7 @@ import {useHasCurrentBoardPermissions} from '../../hooks/permissions'
 import {Permission} from '../../constants'
 
 import AddCommentTourStep from '../onboardingTour/addComments/addComments'
+import UserAvatar from '../userAvatar'
 
 import Comment from './comment'
 
@@ -55,9 +56,11 @@ const CommentsList = (props: Props) => {
 
     const newCommentComponent = (
         <div className='CommentsList__new'>
-            <img
+            <UserAvatar
+                userId={me?.id || ''}
+                name={me?.nickname || me?.username}
+                size='medium'
                 className='comment-avatar'
-                src={Utils.getProfilePicture(me?.id)}
             />
             <MarkdownEditor
                 className='newcomment'

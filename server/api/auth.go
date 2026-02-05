@@ -213,15 +213,18 @@ func (a *API) handleRegister(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	} else {
-		// No signup token, check if no active users
-		userCount, err2 := a.app.GetRegisteredUserCount()
-		if err2 != nil {
-			a.errorResponse(w, r, err2)
-			return
-		}
-		if userCount > 0 {
-			a.errorResponse(w, r, model.NewErrUnauthorized("no sign-up token and user(s) already exist"))
-			return
+		// No signup token, check if open registration is enabled or no active users
+		cfg := a.app.GetConfig()
+		if !cfg.EnableOpenRegistration {
+			userCount, err2 := a.app.GetRegisteredUserCount()
+			if err2 != nil {
+				a.errorResponse(w, r, err2)
+				return
+			}
+			if userCount > 0 {
+				a.errorResponse(w, r, model.NewErrUnauthorized("no sign-up token and user(s) already exist"))
+				return
+			}
 		}
 	}
 

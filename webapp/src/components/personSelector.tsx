@@ -20,10 +20,9 @@ import client from '../octoClient'
 
 import GuestBadge from '../widgets/guestBadge'
 import {PropertyType} from '../properties/types'
+import UserAvatar from './userAvatar'
 
 import './personSelector.scss'
-
-const imageURLForUser = (window as any).Components?.imageURLForUser
 
 type Props = {
     readOnly: boolean
@@ -84,23 +83,21 @@ const PersonSelector = (props: Props): JSX.Element => {
         if (!user) {
             return <div/>
         }
-        let profileImg
-        if (imageURLForUser) {
-            profileImg = imageURLForUser(user.id)
-        }
+        
+        const displayName = Utils.getUserDisplayName(user, clientConfig.teammateNameDisplay)
 
         return (
             <div
                 key={user.id}
                 className={isMulti ? 'MultiPerson-item' : 'Person-item'}
             >
-                {profileImg && (
-                    <img
-                        alt='Person-avatar'
-                        src={profileImg}
-                    />
-                )}
-                {Utils.getUserDisplayName(user, clientConfig.teammateNameDisplay)}
+                <UserAvatar
+                    userId={user.id}
+                    name={displayName}
+                    size='small'
+                    className='Person-avatar'
+                />
+                {displayName}
                 <GuestBadge show={Boolean(user?.is_guest)}/>
             </div>
         )

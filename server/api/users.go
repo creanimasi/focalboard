@@ -2,8 +2,12 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/mattermost/focalboard/server/model"
@@ -19,6 +23,9 @@ func (a *API) registerUsersRoutes(r *mux.Router) {
 	r.HandleFunc("/users/{userID}", a.sessionRequired(a.handleGetUser)).Methods("GET")
 	r.HandleFunc("/users/{userID}/config", a.sessionRequired(a.handleUpdateUserConfig)).Methods(http.MethodPut)
 	r.HandleFunc("/users/me/config", a.sessionRequired(a.handleGetUserPreferences)).Methods(http.MethodGet)
+	// Avatar upload endpoint (requires session)
+	r.HandleFunc("/users/{userID}/avatar", a.sessionRequired(a.handleUploadAvatar)).Methods(http.MethodPost)
+	// Note: Avatar GET is registered in system.go to bypass CSRF for img src loading
 }
 
 func (a *API) handleGetUsersList(w http.ResponseWriter, r *http.Request) {
@@ -431,3 +438,113 @@ func (a *API) handleGetUserPreferences(w http.ResponseWriter, r *http.Request) {
 	jsonBytesResponse(w, http.StatusOK, data)
 	auditRec.Success()
 }
+
+func (a *API) handleUploadAvatar(w http.ResponseWriter, r *http.Request) {
+	// swagger:operation POST /users/{userID}/avatar uploadAvatar
+	//
+	// Upload user avatar
+	//
+	// ---
+	// consumes:
+	// - multipart/form-data
+	// produces:
+	// - application/json
+	// parameters:
+	// - name: userID
+	//   in: path
+	//   description: User ID
+	//   required: true
+	//   type: string
+	// - name: file
+	//   in: formData
+	//   description: Avatar image file
+	//   required: true
+	//   type: file
+	// security:
+	// - BearerAuth: []
+	// responses:
+	//   '200':
+	//     description: success
+	//   default:
+	//     description: internal error
+
+	vars := mux.Vars(r)
+	userID := vars["userID"]
+
+	ctx := r.Context()
+	session := ctx.Value(sessionContextKey).(*model.Session)
+
+	// User can only upload their own avatar
+	if userID != session.UserID {
+		a.errorResponse(w, r, model.NewErrForbidden("cannot upload avatar for another user"))
+		return
+	}
+
+	// Parse multipart form (max 5MB)
+	err := r.ParseMultipartForm(5 << 20)
+	if err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+	defer file.Close()
+
+	// Validate file type
+	contentType := handler.Header.Get("Content-Type")
+	if !strings.HasPrefix(contentType, "image/") {
+		a.errorResponse(w, r, model.NewErrBadRequest("file must be an image"))
+		return
+	}
+
+	// Create avatars directory
+	avatarsDir := filepath.Join(a.app.GetConfig().FilesPath, "avatars")
+	if err := os.MkdirAll(avatarsDir, 0755); err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+
+	// Determine file extension
+	ext := ".jpg"
+	if strings.Contains(contentType, "png") {
+		ext = ".png"
+	} else if strings.Contains(contentType, "gif") {
+		ext = ".gif"
+	} else if strings.Contains(contentType, "webp") {
+		ext = ".webp"
+	}
+
+	// Save file
+	avatarPath := filepath.Join(avatarsDir, userID+ext)
+
+	// Remove old avatar files with different extensions
+	for _, oldExt := range []string{".jpg", ".png", ".gif", ".webp"} {
+		oldPath := filepath.Join(avatarsDir, userID+oldExt)
+		os.Remove(oldPath) // Ignore error if file doesn't exist
+	}
+
+	dst, err := os.Create(avatarPath)
+	if err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+	defer dst.Close()
+
+	if _, err := io.Copy(dst, file); err != nil {
+		a.errorResponse(w, r, err)
+		return
+	}
+
+	// Return success with avatar URL
+	response := map[string]string{
+		"url": fmt.Sprintf("/api/v2/users/%s/avatar", userID),
+	}
+	data, _ := json.Marshal(response)
+	jsonBytesResponse(w, http.StatusOK, data)
+}
+
+// handleGetAvatar is defined in system.go to bypass CSRF check for img src loading

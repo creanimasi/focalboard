@@ -1,3 +1,5 @@
+//go:build cgo
+
 // Server for Focalboard
 package main
 

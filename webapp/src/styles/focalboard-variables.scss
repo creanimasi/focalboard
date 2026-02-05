@@ -1,27 +1,28 @@
 :root {
     --link-visited-color-rgb: #551a8b;
 
-    // Label Colors
+    // Label Colors - Trello-like vibrant colors
     --prop-default: #fff;
-    --prop-gray: #ededed;
-    --prop-brown: #f7ddc3;
-    --prop-orange: #ffd3c1;
-    --prop-yellow: #f7f0b6;
-    --prop-green: #c7eac3;
-    --prop-blue: #b1d1f6;
-    --prop-purple: #e6d0ff;
-    --prop-pink: #ffd6e9;
-    --prop-red: #ffa9a9;
+    --prop-gray: #b3bac5;
+    --prop-brown: #d29034;
+    --prop-orange: #ff9f1a;
+    --prop-yellow: #f2d600;
+    --prop-green: #61bd4f;
+    --prop-blue: #0079bf;
+    --prop-purple: #c377e0;
+    --prop-pink: #ff78cb;
+    --prop-red: #eb5a46;
 
-    // Elevations
-    --elevation-1: 0 2px 3px 0 rgba(0, 0, 0, 0.08);
-    --elevation-2: 0 4px 6px 0 rgba(0, 0, 0, 0.12);
-    --elevation-3: 0 6px 14px 0 rgba(0, 0, 0, 0.12);
-    --elevation-4: 0 8px 24px 0 rgba(0, 0, 0, 0.12);
-    --elevation-5: 0 12px 32px 0 rgba(0, 0, 0, 0.12);
-    --elevation-6: 0 20px 32px 0 rgba(0, 0, 0, 0.12);
+    // Elevations - Trello-like shadows
+    --elevation-1: 0 1px 0 rgba(9, 30, 66, 0.25);
+    --elevation-2: 0 1px 1px rgba(9, 30, 66, 0.25);
+    --elevation-3: 0 2px 4px rgba(9, 30, 66, 0.2);
+    --elevation-4: 0 4px 8px rgba(9, 30, 66, 0.25);
+    --elevation-5: 0 8px 16px rgba(9, 30, 66, 0.25);
+    --elevation-6: 0 12px 24px rgba(9, 30, 66, 0.25);
 
-    // Radius
-    --default-rad: 4px;
-    --modal-rad: 8px;
+    // Radius - Trello uses larger radius
+    --default-rad: 8px;
+    --modal-rad: 12px;
+    --card-rad: 8px;
 }

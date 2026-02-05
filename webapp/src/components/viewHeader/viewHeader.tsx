@@ -42,6 +42,7 @@ import ViewHeaderSortMenu from './viewHeaderSortMenu'
 import ViewHeaderActionsMenu from './viewHeaderActionsMenu'
 import ViewHeaderSearch from './viewHeaderSearch'
 import FilterComponent from './filterComponent'
+import ViewHeaderMemberFilter from './viewHeaderMemberFilter'
 
 import './viewHeader.scss'
 
@@ -200,6 +201,9 @@ const ViewHeader = (props: Props) => {
                         }}
                     />}
                 </ModalWrapper>
+
+                {/* Member Filter */}
+                <ViewHeaderMemberFilter/>
 
                 {/* Sort */}
 

@@ -294,6 +294,7 @@ const CardDetail = (props: Props): JSX.Element|null => {
                     <hr/>
                     <AttachmentList
                         attachments={attachments}
+                        card={card}
                         onDelete={onDelete}
                         addAttachment={addAttachment}
                     />

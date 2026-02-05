@@ -43,6 +43,8 @@ import octoClient from '../octoClient'
 
 import ShareBoardButton from './shareBoard/shareBoardButton'
 import ShareBoardLoginButton from './shareBoard/shareBoardLoginButton'
+import NotificationBell from './notificationBell'
+import BoardBackgroundPicker from './boardBackgroundPicker'
 
 import CardDialog from './cardDialog'
 import RootPortal from './rootPortal'
@@ -80,6 +82,7 @@ const CenterPanel = (props: Props) => {
     const [selectedCardIds, setSelectedCardIds] = useState<string[]>([])
     const [cardIdToFocusOnRender, setCardIdToFocusOnRender] = useState('')
     const [showHiddenCardCountNotification, setShowHiddenCardCountNotification] = useState(false)
+    const [backgroundUrl, setBackgroundUrl] = useState<string | null>(null)
 
     const onboardingTourStarted = useAppSelector(getOnboardingTourStarted)
     const onboardingTourCategory = useAppSelector(getOnboardingTourCategory)
@@ -91,6 +94,33 @@ const CenterPanel = (props: Props) => {
     const dispatch = useAppDispatch()
 
     const clientConfig = useAppSelector<ClientConfig>(getClientConfig)
+
+    // Load background image if it's a file reference
+    useEffect(() => {
+        const bgValue = props.board.properties?.background as string
+        if (!bgValue) {
+            setBackgroundUrl(null)
+            return
+        }
+
+        if (bgValue.startsWith('file:')) {
+            // Parse file reference: file:boardId:fileId
+            const parts = bgValue.split(':')
+            if (parts.length === 3) {
+                const boardId = parts[1]
+                const fileId = parts[2]
+                octoClient.getFileAsDataUrl(boardId, fileId).then((fileInfo) => {
+                    if (fileInfo.url) {
+                        setBackgroundUrl(fileInfo.url)
+                    }
+                })
+            }
+        } else if (bgValue.startsWith('linear-gradient') || bgValue.startsWith('url(')) {
+            setBackgroundUrl(bgValue)
+        } else {
+            setBackgroundUrl(null)
+        }
+    }, [props.board.properties?.background])
 
     // empty dependency array yields behavior like `componentDidMount`, it only runs _once_
     // https://stackoverflow.com/a/58579462
@@ -396,10 +426,27 @@ const CenterPanel = (props: Props) => {
         return {visible: vg, hidden: hg}
     }, [cards, activeView.fields.visibleOptionIds, activeView.fields.hiddenOptionIds, groupByProperty, boardUsers])
 
+    // Build background style
+    const backgroundStyle = useMemo(() => {
+        if (!backgroundUrl) {
+            return {}
+        }
+        if (backgroundUrl.startsWith('linear-gradient')) {
+            return {background: backgroundUrl}
+        }
+        return {
+            backgroundImage: `url(${backgroundUrl})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+        }
+    }, [backgroundUrl])
+
     return (
         <div
-            className='BoardComponent'
+            className={`BoardComponent ${backgroundUrl ? 'has-background' : ''}`}
             onClick={backgroundClicked}
+            style={backgroundStyle}
         >
             {props.shownCardId &&
                 <RootPortal>
@@ -425,6 +472,11 @@ const CenterPanel = (props: Props) => {
                         readonly={props.readonly}
                     />
                     <div className='shareButtonWrapper'>
+                        <BoardBackgroundPicker
+                            board={board}
+                            readonly={props.readonly}
+                        />
+                        <NotificationBell />
                         {showShareButton &&
                         <ShareBoardButton
                             enableSharedBoards={props.clientConfig?.enablePublicSharedBoards || false}

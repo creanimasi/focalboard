@@ -8,6 +8,7 @@ type CardFields = {
     isTemplate?: boolean
     properties: Record<string, string | string[]>
     contentOrder: Array<string | string[]>
+    coverFileId?: string  // Cover image file ID for Trello-like card covers
 }
 
 type Card = Block & {
@@ -35,6 +36,7 @@ function createCard(block?: Block): Card {
             properties: {...(block?.fields.properties || {})},
             contentOrder,
             isTemplate: block?.fields.isTemplate || false,
+            coverFileId: block?.fields.coverFileId || '',
         },
     }
 }

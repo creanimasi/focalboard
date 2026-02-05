@@ -5,43 +5,146 @@
     flex-direction: column;
     align-items: flex-start;
     overflow-wrap: anywhere;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    padding: 12px 16px;
-    box-shadow: rgba(var(--center-channel-color-rgb), 0.1) 0 0 0 1px,
-        rgba(var(--center-channel-color-rgb), 0.1) 0 2px 4px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 0;
+    background-color: rgb(var(--center-channel-bg-rgb));
+    box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
 
     cursor: pointer;
     color: rgb(var(--center-channel-color-rgb));
 
-    transition: background 100ms ease-out 0s;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
     &:hover {
-        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+        background-color: rgb(var(--center-channel-bg-rgb));
+        box-shadow: 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 0 1px rgba(9, 30, 66, 0.08);
+        transform: translateY(-2px);
 
         .optionsMenu {
-            display: block;
+            display: flex;
+            opacity: 1;
         }
     }
 
     &.selected {
-        background-color: rgba(90, 200, 255, 0.2);
+        background-color: rgba(90, 200, 255, 0.15);
+        box-shadow: 0 0 0 2px #0079bf;
+    }
+
+    &.dragover {
+        background-color: rgba(0, 121, 191, 0.1);
+    }
+
+    // Cover image at top - Trello style
+    .kanban-card-cover {
+        width: 100%;
+        min-height: 100px;
+        max-height: 200px;
+        border-radius: 8px 8px 0 0;
+        overflow: hidden;
+        flex-shrink: 0;
+        background-color: rgba(var(--center-channel-color-rgb), 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: contain;
+            display: block;
+        }
+    }
+
+    // Card with cover has no top padding on labels
+    &.has-cover {
+        .kanban-card-labels {
+            padding-top: 8px;
+        }
+    }
+
+    // Labels strip - Trello style
+    .kanban-card-labels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px 8px 0 8px;
+        width: 100%;
+
+        .kanban-label {
+            height: 8px;
+            min-width: 40px;
+            max-width: 60px;
+            border-radius: 4px;
+            flex-shrink: 0;
+            transition: height 0.1s ease, padding 0.1s ease;
+
+            &:hover {
+                height: 16px;
+            }
+        }
+    }
+
+    // Main content area
+    .kanban-card-content {
+        padding: 8px 8px 6px 8px;
+        width: 100%;
     }
 
     .optionsMenu {
         background: rgb(var(--center-channel-bg-rgb));
         display: none;
+        opacity: 0;
         position: absolute;
-        right: 12px;
+        right: 4px;
+        top: 4px;
+        z-index: 10;
+        border-radius: 4px;
+        box-shadow: 0 1px 2px rgba(9, 30, 66, 0.25);
+        transition: opacity 0.1s ease;
 
         &.show {
-            display: block;
+            display: flex;
+            opacity: 1;
+        }
+
+        // Make dropdown menu not clipped by parent overflow
+        .Menu {
+            position: fixed;
+            z-index: 9999;
         }
     }
 
     .octo-tooltip {
         display: flex;
         max-width: 100%;
+    }
+
+    // Properties section - Trello-like compact
+    .kanban-card-properties {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 4px;
+
+        .octo-propertyvalue {
+            input[value=''] {
+                display: none;
+            }
+
+            .Label {
+                font-size: 12px;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-weight: 500;
+
+                &.empty {
+                    display: none;
+                }
+            }
+        }
     }
 
     .octo-propertyvalue {
@@ -58,27 +161,243 @@
 
     .octo-icontitle {
         flex: 1 1 auto;
-        font-weight: 600;
+        font-weight: 400;
+        font-size: 14px;
         line-height: 20px;
-        margin-bottom: 8px;
+        color: rgb(var(--center-channel-color-rgb));
+        display: flex;
+        align-items: flex-start;
 
         .octo-icon {
             font-size: 16px;
-            margin-right: 4px;
+            margin-right: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 20px;
             height: 20px;
+            flex-shrink: 0;
         }
 
         .octo-titletext {
             display: -webkit-box; // stylelint-disable-line
             overflow: hidden;
             text-overflow: ellipsis;
-            max-height: 100px;
-            -webkit-line-clamp: 5;
+            max-height: 80px;
+            -webkit-line-clamp: 4;
             -webkit-box-orient: vertical; // stylelint-disable-line
+            word-break: break-word;
         }
     }
+
+    // Footer with badges
+    .kanban-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 6px 8px 8px 8px;
+        margin-top: 4px;
+        gap: 8px;
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .footer-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+        }
+
+        .quick-assign-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: all 0.15s ease;
+            color: rgba(var(--center-channel-color-rgb), 0.5);
+
+            &:hover {
+                background: rgba(var(--center-channel-color-rgb), 0.1);
+                color: rgba(var(--center-channel-color-rgb), 0.8);
+            }
+
+            i {
+                font-size: 16px;
+            }
+        }
+
+        .card-deadline {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+            color: rgba(var(--center-channel-color-rgb), 0.7);
+            font-size: 12px;
+            font-weight: 500;
+
+            i {
+                font-size: 14px;
+            }
+
+            &.overdue {
+                background: #ffeceb;
+                color: #eb5a46;
+            }
+
+            &.due-soon {
+                background: #fdf4e7;
+                color: #d29034;
+            }
+        }
+
+        .card-members {
+            display: flex;
+            align-items: center;
+
+            .member-avatar {
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                font-weight: 600;
+                color: white;
+                margin-left: -6px;
+                border: 2px solid rgb(var(--center-channel-bg-rgb));
+                cursor: default;
+                flex-shrink: 0;
+
+                &:first-child {
+                    margin-left: 0;
+                }
+
+                &.more {
+                    background: rgba(var(--center-channel-color-rgb), 0.3);
+                    color: rgba(var(--center-channel-color-rgb), 0.9);
+                    font-size: 9px;
+                }
+            }
+        }
+    }
+
+    // Show quick assign button on hover
+    &:hover {
+        .quick-assign-btn {
+            opacity: 1;
+        }
+    }
+}
+
+// Quick Assign Popup (rendered via portal)
+.quick-assign-popup {
+    width: 200px;
+    background: rgb(var(--center-channel-bg-rgb));
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.08);
+    overflow: hidden;
+
+    .quick-assign-header {
+        padding: 10px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: rgba(var(--center-channel-color-rgb), 0.7);
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+    }
+
+    .quick-assign-search {
+        width: 100%;
+        padding: 8px 12px;
+        border: none;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        font-size: 13px;
+        outline: none;
+        background: transparent;
+        color: rgb(var(--center-channel-color-rgb));
+
+        &::placeholder {
+            color: rgba(var(--center-channel-color-rgb), 0.5);
+        }
+    }
+
+    .quick-assign-list {
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 6px;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(var(--center-channel-color-rgb), 0.15);
+            border-radius: 2px;
+        }
+    }
+
+    .quick-assign-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.1s ease;
+
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.06);
+        }
+
+        &.assigned {
+            background: rgba(0, 121, 191, 0.08);
+        }
+
+        .member-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .member-name {
+            flex: 1;
+            font-size: 13px;
+            color: rgb(var(--center-channel-color-rgb));
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .check-icon {
+            color: #0079bf;
+            font-size: 16px;
+        }
+    }
+
+    .quick-assign-empty {
+        padding: 16px;
+        text-align: center;
+        font-size: 12px;
+        color: rgba(var(--center-channel-color-rgb), 0.5);    }
 }

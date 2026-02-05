@@ -50,6 +50,8 @@ import {Board} from '../../blocks/board'
 import SidebarCategory from './sidebarCategory'
 import SidebarSettingsMenu from './sidebarSettingsMenu'
 import SidebarUserMenu from './sidebarUserMenu'
+import SidebarAccountButton from './sidebarAccountButton'
+import SidebarAdminLink from './sidebarAdminLink'
 
 type Props = {
     activeBoardId?: string
@@ -417,7 +419,9 @@ const Sidebar = (props: Props) => {
                 />
             </div>
 
+            <SidebarAdminLink/>
             <SidebarSettingsMenu activeTheme={getActiveThemeName()}/>
+            <SidebarAccountButton/>
         </div>
     )
 }

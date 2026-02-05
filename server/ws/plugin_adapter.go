@@ -673,3 +673,21 @@ func (pa *PluginAdapter) BroadcastCardLimitTimestampChange(cardLimitTimestamp in
 
 	pa.sendMessageToAll(websocketActionUpdateCardLimitTimestamp, utils.StructToMap(message))
 }
+
+func (pa *PluginAdapter) BroadcastUserNotification(targetUserID string, notification *model.UserNotification) {
+	pa.logger.Debug("BroadcastUserNotification",
+		mlog.String("targetUserID", targetUserID),
+		mlog.String("type", notification.Type),
+	)
+
+	message := UserNotificationMsg{
+		Action:       websocketActionUserNotification,
+		Notification: notification,
+	}
+
+	pa.api.PublishWebSocketEvent(
+		websocketMessagePrefix+websocketActionUserNotification,
+		utils.StructToMap(message),
+		&mmModel.WebsocketBroadcast{UserId: targetUserID},
+	)
+}

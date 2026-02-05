@@ -9,6 +9,7 @@ import './kanbanColumn.scss'
 type Props = {
     onDrop: (card: Card) => void
     children: React.ReactNode
+    color?: string
 }
 
 const KanbanColumn = (props: Props) => {
@@ -27,6 +28,9 @@ const KanbanColumn = (props: Props) => {
     let className = 'octo-board-column'
     if (isOver) {
         className += ' dragover'
+    }
+    if (props.color) {
+        className += ` column-${props.color}`
     }
     return (
         <div

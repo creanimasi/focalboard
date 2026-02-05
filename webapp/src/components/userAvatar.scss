@@ -1,0 +1,40 @@
+.UserAvatar {
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    overflow: hidden;
+    flex-shrink: 0;
+    
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .avatar-initials {
+        text-transform: uppercase;
+        line-height: 1;
+    }
+    
+    // Size variants
+    &.avatar-small {
+        width: 20px;
+        height: 20px;
+        font-size: 9px;
+    }
+    
+    &.avatar-medium {
+        width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+    
+    &.avatar-large {
+        width: 36px;
+        height: 36px;
+        font-size: 13px;
+    }
+}

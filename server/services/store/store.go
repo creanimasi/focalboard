@@ -68,6 +68,8 @@ type Store interface {
 	SearchUsersByTeam(teamID string, searchQuery string, asGuestID string, excludeBots bool, showEmail, showName bool) ([]*model.User, error)
 	PatchUserPreferences(userID string, patch model.UserPreferencesPatch) (mmModel.Preferences, error)
 	GetUserPreferences(userID string) (mmModel.Preferences, error)
+	GetAllUsers() ([]*model.User, error)
+	DeleteUser(userID string) error
 
 	GetActiveUserCount(updatedSecondsAgo int64) (int, error)
 	GetSession(token string, expireTime int64) (*model.Session, error)
@@ -148,6 +150,14 @@ type Store interface {
 	DeleteNotificationHint(blockID string) error
 	GetNotificationHint(blockID string) (*model.NotificationHint, error)
 	GetNextNotificationHint(remove bool) (*model.NotificationHint, error)
+
+	// User Notifications
+	CreateUserNotification(notification *model.UserNotification) (*model.UserNotification, error)
+	GetUserNotifications(userID string, limit int) ([]*model.UserNotification, error)
+	GetUnreadNotificationCount(userID string) (int, error)
+	MarkNotificationAsRead(notificationID, userID string) error
+	MarkAllNotificationsAsRead(userID string) error
+	DeleteUserNotification(notificationID, userID string) error
 
 	RemoveDefaultTemplates(boards []*model.Board) error
 	GetTemplateBoards(teamID, userID string) ([]*model.Board, error)

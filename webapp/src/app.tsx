@@ -12,6 +12,7 @@ import TelemetryClient from './telemetry/telemetryClient'
 import {getMessages} from './i18n'
 import {FlashMessages} from './components/flashMessages'
 import NewVersionBanner from './components/newVersionBanner'
+import MemberNotificationToast from './components/notifications/memberNotificationToast'
 import {Utils} from './utils'
 import {fetchMe, getMe} from './store/users'
 import {getLanguage, fetchLanguage} from './store/language'
@@ -49,6 +50,7 @@ const App = (props: Props): JSX.Element => {
         >
             <DndProvider backend={Utils.isMobile() ? TouchBackend : HTML5Backend}>
                 <FlashMessages milliseconds={2000}/>
+                <MemberNotificationToast/>
                 <div id='frame'>
                     <div id='main'>
                         <NewVersionBanner/>

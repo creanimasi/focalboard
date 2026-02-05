@@ -23,7 +23,7 @@ const SetWindowTitleAndIcon = (): null => {
             }
             document.title = title
         } else {
-            document.title = 'Focalboard'
+            document.title = 'Crmboard'
         }
     }, [board?.title, activeView?.title])
 

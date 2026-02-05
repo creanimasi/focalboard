@@ -1734,6 +1734,35 @@ func (mr *MockStoreMockRecorder) UpdateUserPasswordByID(arg0, arg1 interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserPasswordByID", reflect.TypeOf((*MockStore)(nil).UpdateUserPasswordByID), arg0, arg1)
 }
 
+// GetAllUsers mocks base method.
+func (m *MockStore) GetAllUsers() ([]*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllUsers")
+	ret0, _ := ret[0].([]*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllUsers indicates an expected call of GetAllUsers.
+func (mr *MockStoreMockRecorder) GetAllUsers() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockStore)(nil).GetAllUsers))
+}
+
+// DeleteUser mocks base method.
+func (m *MockStore) DeleteUser(arg0 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUser", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteUser indicates an expected call of DeleteUser.
+func (mr *MockStoreMockRecorder) DeleteUser(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUser", reflect.TypeOf((*MockStore)(nil).DeleteUser), arg0)
+}
+
 // UpsertNotificationHint mocks base method.
 func (m *MockStore) UpsertNotificationHint(arg0 *model.NotificationHint, arg1 time.Duration) (*model.NotificationHint, error) {
 	m.ctrl.T.Helper()
@@ -1789,4 +1818,91 @@ func (m *MockStore) UpsertTeamSignupToken(arg0 model.Team) error {
 func (mr *MockStoreMockRecorder) UpsertTeamSignupToken(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpsertTeamSignupToken", reflect.TypeOf((*MockStore)(nil).UpsertTeamSignupToken), arg0)
+}
+
+// CreateUserNotification mocks base method.
+func (m *MockStore) CreateUserNotification(arg0 *model.UserNotification) (*model.UserNotification, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUserNotification", arg0)
+	ret0, _ := ret[0].(*model.UserNotification)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CreateUserNotification indicates an expected call of CreateUserNotification.
+func (mr *MockStoreMockRecorder) CreateUserNotification(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUserNotification", reflect.TypeOf((*MockStore)(nil).CreateUserNotification), arg0)
+}
+
+// GetUserNotifications mocks base method.
+func (m *MockStore) GetUserNotifications(arg0 string, arg1 int) ([]*model.UserNotification, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserNotifications", arg0, arg1)
+	ret0, _ := ret[0].([]*model.UserNotification)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserNotifications indicates an expected call of GetUserNotifications.
+func (mr *MockStoreMockRecorder) GetUserNotifications(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserNotifications", reflect.TypeOf((*MockStore)(nil).GetUserNotifications), arg0, arg1)
+}
+
+// GetUnreadNotificationCount mocks base method.
+func (m *MockStore) GetUnreadNotificationCount(arg0 string) (int, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUnreadNotificationCount", arg0)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUnreadNotificationCount indicates an expected call of GetUnreadNotificationCount.
+func (mr *MockStoreMockRecorder) GetUnreadNotificationCount(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUnreadNotificationCount", reflect.TypeOf((*MockStore)(nil).GetUnreadNotificationCount), arg0)
+}
+
+// MarkNotificationAsRead mocks base method.
+func (m *MockStore) MarkNotificationAsRead(arg0, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MarkNotificationAsRead", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// MarkNotificationAsRead indicates an expected call of MarkNotificationAsRead.
+func (mr *MockStoreMockRecorder) MarkNotificationAsRead(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkNotificationAsRead", reflect.TypeOf((*MockStore)(nil).MarkNotificationAsRead), arg0, arg1)
+}
+
+// MarkAllNotificationsAsRead mocks base method.
+func (m *MockStore) MarkAllNotificationsAsRead(arg0 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "MarkAllNotificationsAsRead", arg0)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// MarkAllNotificationsAsRead indicates an expected call of MarkAllNotificationsAsRead.
+func (mr *MockStoreMockRecorder) MarkAllNotificationsAsRead(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MarkAllNotificationsAsRead", reflect.TypeOf((*MockStore)(nil).MarkAllNotificationsAsRead), arg0)
+}
+
+// DeleteUserNotification mocks base method.
+func (m *MockStore) DeleteUserNotification(arg0, arg1 string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "DeleteUserNotification", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// DeleteUserNotification indicates an expected call of DeleteUserNotification.
+func (mr *MockStoreMockRecorder) DeleteUserNotification(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserNotification", reflect.TypeOf((*MockStore)(nil).DeleteUserNotification), arg0, arg1)
 }

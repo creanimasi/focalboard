@@ -29,6 +29,7 @@ const mockedMutator = mocked(Mutator, true)
 describe('src/components/kanban/kanbanCard', () => {
     const board = TestBlockFactory.createBoard()
     const card = TestBlockFactory.createCard(board)
+    const activeView = TestBlockFactory.createBoardView(board)
     const propertyTemplate: IPropertyTemplate = {
         id: 'id',
         name: 'name',
@@ -81,6 +82,7 @@ describe('src/components/kanban/kanbanCard', () => {
                 <KanbanCard
                     card={card}
                     board={board}
+                    activeView={activeView}
                     visiblePropertyTemplates={[propertyTemplate]}
                     visibleBadges={false}
                     isSelected={false}
@@ -99,6 +101,7 @@ describe('src/components/kanban/kanbanCard', () => {
                 <KanbanCard
                     card={card}
                     board={board}
+                    activeView={activeView}
                     visiblePropertyTemplates={[propertyTemplate]}
                     visibleBadges={false}
                     isSelected={false}
@@ -117,6 +120,7 @@ describe('src/components/kanban/kanbanCard', () => {
                 <KanbanCard
                     card={card}
                     board={board}
+                    activeView={activeView}
                     visiblePropertyTemplates={[propertyTemplate]}
                     visibleBadges={false}
                     isSelected={false}
@@ -153,6 +157,7 @@ describe('src/components/kanban/kanbanCard', () => {
                 <KanbanCard
                     card={card}
                     board={board}
+                    activeView={activeView}
                     visiblePropertyTemplates={[propertyTemplate]}
                     visibleBadges={false}
                     isSelected={false}
@@ -179,6 +184,7 @@ describe('src/components/kanban/kanbanCard', () => {
                 <KanbanCard
                     card={card}
                     board={board}
+                    activeView={activeView}
                     visiblePropertyTemplates={[propertyTemplate]}
                     visibleBadges={false}
                     isSelected={false}

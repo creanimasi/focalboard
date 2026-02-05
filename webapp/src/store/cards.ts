@@ -20,6 +20,7 @@ import {getBoardUsers} from './users'
 import {getLastCommentByCard} from './comments'
 import {getCurrentView} from './views'
 import {getSearchText} from './searchText'
+import {getMemberFilterIds} from './memberFilter'
 
 import {RootState} from './index'
 
@@ -375,7 +376,8 @@ export const getCurrentViewCardsSortedFilteredAndGroupedWithoutLimit = createSel
     getCurrentView,
     getSearchText,
     getBoardUsers,
-    (cards, lastCommentByCard, board, view, searchText, users) => {
+    getMemberFilterIds,
+    (cards, lastCommentByCard, board, view, searchText, users, memberFilterIds) => {
         if (!view || !board || !users || !cards) {
             return []
         }
@@ -387,6 +389,26 @@ export const getCurrentViewCardsSortedFilteredAndGroupedWithoutLimit = createSel
         if (searchText) {
             result = searchFilterCards(result, board, searchText)
         }
+
+        // Apply member filter
+        if (memberFilterIds && memberFilterIds.length > 0) {
+            // Find person/multiPerson property
+            const personProperty = board.cardProperties.find(p => p.type === 'person' || p.type === 'multiPerson')
+            if (personProperty) {
+                result = result.filter(card => {
+                    const value = card.fields.properties[personProperty.id]
+                    if (!value) return false
+                    
+                    if (typeof value === 'string') {
+                        return memberFilterIds.includes(value)
+                    } else if (Array.isArray(value)) {
+                        return value.some(id => memberFilterIds.includes(id as string))
+                    }
+                    return false
+                })
+            }
+        }
+
         result = sortCards(result, lastCommentByCard, board, view, users)
         return result
     },

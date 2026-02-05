@@ -789,3 +789,30 @@ func (ws *Server) BroadcastSubscriptionChange(workspaceID string, subscription *
 func (ws *Server) BroadcastCardLimitTimestampChange(cardLimitTimestamp int64) {
 	// not implemented for standalone server.
 }
+
+// BroadcastUserNotification sends a notification to all sessions for a specific user.
+func (ws *Server) BroadcastUserNotification(targetUserID string, notification *model.UserNotification) {
+	message := UserNotificationMsg{
+		Action:       websocketActionUserNotification,
+		Notification: notification,
+	}
+
+	ws.mu.RLock()
+	defer ws.mu.RUnlock()
+
+	// Find all listeners for this user across all teams
+	for listener := range ws.listeners {
+		if listener.userID == targetUserID {
+			ws.logger.Debug("Broadcast user notification",
+				mlog.String("targetUserID", targetUserID),
+				mlog.Stringer("remoteAddr", listener.conn.RemoteAddr()),
+			)
+
+			err := listener.WriteJSON(message)
+			if err != nil {
+				ws.logger.Error("broadcast notification error", mlog.Err(err))
+				listener.conn.Close()
+			}
+		}
+	}
+}

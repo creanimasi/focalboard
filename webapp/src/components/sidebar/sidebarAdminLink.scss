@@ -1,0 +1,31 @@
+.SidebarAdminLink {
+    padding: 0 12px;
+    margin-bottom: 8px;
+
+    &__button {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border: none;
+        border-radius: 6px;
+        background: linear-gradient(135deg, rgba(var(--button-bg-rgb), 0.1), rgba(var(--button-bg-rgb), 0.05));
+        color: rgba(var(--sidebar-text-rgb), 0.9);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s ease;
+
+        &:hover {
+            background: linear-gradient(135deg, rgba(var(--button-bg-rgb), 0.2), rgba(var(--button-bg-rgb), 0.1));
+            color: rgba(var(--sidebar-text-rgb), 1);
+        }
+    }
+
+    &__icon {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+    }
+}

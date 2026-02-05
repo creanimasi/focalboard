@@ -40,6 +40,14 @@ build/Release
 
 # Environment files 
 .env
+.env.*
+!.env.example
+
+# Config files with secrets
+config.json
+bin/config.json
+backups/config_*.json
+backups/*.sql
 
 # Dependency directory
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git

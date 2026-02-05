@@ -1,19 +1,30 @@
 .CardBadges {
     display: flex;
     align-items: center;
-    margin-top: 4px;
-    height: 24px;
+    flex-wrap: wrap;
+    gap: 4px;
 
     span {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        margin-right: 4px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: rgba(var(--center-channel-color-rgb), 0.7);
+        background-color: rgba(var(--center-channel-color-rgb), 0.08);
+        transition: background-color 0.1s ease;
+
+        &:hover {
+            background-color: rgba(var(--center-channel-color-rgb), 0.15);
+        }
 
         .Icon,
         .CompassIcon {
-            color: rgba(var(--center-channel-color-rgb), 0.64);
+            width: 14px;
+            height: 14px;
+            color: rgba(var(--center-channel-color-rgb), 0.6);
             fill: currentColor;
-            margin-right: 4px;
+            margin-right: 2px;
         }
     }
 }

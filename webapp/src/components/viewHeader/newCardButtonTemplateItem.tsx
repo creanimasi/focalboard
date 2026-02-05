@@ -36,7 +36,6 @@ const NewCardButtonTemplateItem = (props: Props) => {
             key={cardTemplate.id}
             id={cardTemplate.id}
             name={displayName}
-            icon={<div className='Icon'>{cardTemplate.fields.icon}</div>}
             className={isDefaultTemplate ? 'bold-menu-text' : ''}
             onClick={() => {
                 props.addCardFromTemplate(cardTemplate.id)

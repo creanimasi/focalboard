@@ -72,3 +72,9 @@ type CategoryBoardReorderMessage struct {
 	BoardOrder []string `json:"BoardOrder"`
 	TeamID     string   `json:"teamId"`
 }
+
+// UserNotificationMsg is sent when a user receives a notification.
+type UserNotificationMsg struct {
+	Action       string                  `json:"action"`
+	Notification *model.UserNotification `json:"notification"`
+}

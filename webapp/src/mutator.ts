@@ -310,6 +310,19 @@ class Mutator {
         )
     }
 
+    async changeCardCover(boardId: string, cardId: string, oldCoverFileId: string|undefined, coverFileId: string, description = 'change card cover') {
+        await undoManager.perform(
+            async () => {
+                await octoClient.patchBlock(boardId, cardId, {updatedFields: {coverFileId}})
+            },
+            async () => {
+                await octoClient.patchBlock(boardId, cardId, {updatedFields: {coverFileId: oldCoverFileId}})
+            },
+            description,
+            this.undoGroupId,
+        )
+    }
+
     async changeBoardDescription(boardId: string, blockId: string, oldBlockDescription: string|undefined, blockDescription: string, description = 'change description') {
         await undoManager.perform(
             async () => {
@@ -337,6 +350,19 @@ class Mutator {
                 await octoClient.patchBoard(boardId, {showDescription: oldShowDescription})
             },
             actionDescription,
+            this.undoGroupId,
+        )
+    }
+
+    async changeBoardBackground(boardId: string, oldBackground: string | undefined, newBackground: string | undefined, description = 'change board background') {
+        await undoManager.perform(
+            async () => {
+                await octoClient.patchBoard(boardId, {updatedProperties: {background: newBackground || ''}})
+            },
+            async () => {
+                await octoClient.patchBoard(boardId, {updatedProperties: {background: oldBackground || ''}})
+            },
+            description,
             this.undoGroupId,
         )
     }

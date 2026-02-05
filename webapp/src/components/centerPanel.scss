@@ -82,12 +82,23 @@
     .shareButtonWrapper {
         position: relative;
         flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 4px;
     }
 
     .NotificationBox {
         .AlertIcon {
             color: #ffbc1f;
             font-size: 24px;
+        }
+    }
+
+    // Background styling
+    &.has-background {
+        > .top-head {
+            background: rgba(var(--center-channel-bg-rgb), 0.85);
+            backdrop-filter: blur(10px);
         }
     }
 }

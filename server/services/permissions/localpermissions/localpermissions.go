@@ -12,18 +12,43 @@ import (
 )
 
 type Service struct {
-	store  permissions.Store
-	logger mlog.LoggerIFace
+	store         permissions.Store
+	logger        mlog.LoggerIFace
+	firstUserID   string
+	firstUserDone bool
 }
 
 func New(store permissions.Store, logger mlog.LoggerIFace) *Service {
 	return &Service{
-		store:  store,
-		logger: logger,
+		store:         store,
+		logger:        logger,
+		firstUserID:   "",
+		firstUserDone: false,
 	}
 }
 
 func (s *Service) HasPermissionTo(userID string, permission *mmModel.Permission) bool {
+	// For standalone mode, the first registered user is the admin
+	if permission.Id == model.PermissionManageSystem.Id {
+		// Cache the first user ID to avoid repeated DB lookups
+		if !s.firstUserDone {
+			users, err := s.store.GetAllUsers()
+			if err == nil && len(users) > 0 {
+				// Find the oldest user (first registered)
+				var oldestUser *model.User
+				for _, u := range users {
+					if oldestUser == nil || u.CreateAt < oldestUser.CreateAt {
+						oldestUser = u
+					}
+				}
+				if oldestUser != nil {
+					s.firstUserID = oldestUser.ID
+				}
+			}
+			s.firstUserDone = true
+		}
+		return userID == s.firstUserID
+	}
 	return false
 }
 

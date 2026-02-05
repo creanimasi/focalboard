@@ -16,6 +16,7 @@ import ChangePasswordPage from './pages/changePasswordPage'
 import ErrorPage from './pages/errorPage'
 import LoginPage from './pages/loginPage'
 import RegisterPage from './pages/registerPage'
+import AdminPanel from './pages/adminPanel/adminPanel'
 import {Utils} from './utils'
 import octoClient from './octoClient'
 import {setGlobalError, getGlobalError} from './store/globalError'
@@ -92,6 +93,10 @@ const FocalboardRouter = (props: Props): JSX.Element => {
                 </FBRoute>
                 <FBRoute path='/change_password'>
                     <ChangePasswordPage/>
+                </FBRoute>
+
+                <FBRoute path='/admin' loginRequired={true}>
+                    <AdminPanel/>
                 </FBRoute>
 
                 <FBRoute path={['/team/:teamId/new/:channelId']}>

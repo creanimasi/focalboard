@@ -1,0 +1,108 @@
+.MemberActivityLog {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+
+    .activity-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        color: rgba(var(--center-channel-color-rgb), 0.7);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        .CompassIcon {
+            font-size: 16px;
+        }
+    }
+
+    .activity-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 8px 0;
+        
+        .activity-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+
+            .activity-text {
+                font-size: 13px;
+                color: rgb(var(--center-channel-color-rgb));
+                line-height: 1.4;
+
+                strong {
+                    font-weight: 600;
+                }
+            }
+
+            .activity-time {
+                font-size: 11px;
+                color: rgba(var(--center-channel-color-rgb), 0.5);
+                margin-top: 2px;
+            }
+        }
+    }
+
+    .no-activity {
+        text-align: center;
+        padding: 20px;
+        color: rgba(var(--center-channel-color-rgb), 0.5);
+        font-size: 13px;
+    }
+}
+
+// Compact version for sidebar
+.MemberActivityLog.compact {
+    margin-top: 12px;
+    padding-top: 12px;
+
+    .activity-header {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .activity-item {
+        padding: 6px 0;
+        gap: 8px;
+
+        .activity-avatar {
+            width: 24px;
+            height: 24px;
+            font-size: 10px;
+        }
+
+        .activity-content {
+            .activity-text {
+                font-size: 12px;
+            }
+
+            .activity-time {
+                font-size: 10px;
+            }
+        }
+    }
+}

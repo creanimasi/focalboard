@@ -629,6 +629,38 @@ class OctoClient {
         return xhr
     }
 
+    // Avatar APIs
+    
+    async uploadAvatar(userID: string, file: File): Promise<string | undefined> {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            const headers = this.headers() as Record<string, string>
+            delete headers['Content-Type']
+
+            const response = await fetch(this.getBaseURL() + `/api/v2/users/${userID}/avatar`, {
+                method: 'POST',
+                headers,
+                body: formData,
+            })
+            
+            if (response.status !== 200) {
+                return undefined
+            }
+
+            const json = await response.json()
+            return json.url
+        } catch (e) {
+            Utils.logError(`uploadAvatar ERROR: ${e}`)
+            return undefined
+        }
+    }
+
+    getAvatarUrl(userID: string): string {
+        return this.getBaseURL() + `/api/v2/users/${userID}/avatar`
+    }
+
     async getFileInfo(boardId: string, fileId: string): Promise<FileInfo> {
         let path = '/api/v2/files/teams/' + this.teamId + '/' + boardId + '/' + fileId + '/info'
         const readToken = Utils.getReadToken()
@@ -1083,6 +1115,82 @@ class OctoClient {
             headers: this.headers(),
         })
     }
+
+    // User Notifications API
+
+    async getNotifications(limit = 50): Promise<UserNotification[]> {
+        const path = `/api/v2/notifications?limit=${limit}`
+        const response = await fetch(this.getBaseURL() + path, {headers: this.headers()})
+        if (response.status !== 200) {
+            return []
+        }
+        return (await this.getJson(response, [])) as UserNotification[]
+    }
+
+    async getUnreadNotificationCount(): Promise<number> {
+        const path = '/api/v2/notifications/unread-count'
+        const response = await fetch(this.getBaseURL() + path, {headers: this.headers()})
+        if (response.status !== 200) {
+            return 0
+        }
+        const data = (await this.getJson(response, {count: 0})) as {count: number}
+        return data.count
+    }
+
+    async createNotification(notification: Partial<UserNotification>): Promise<UserNotification | undefined> {
+        const path = '/api/v2/notifications'
+        const response = await fetch(this.getBaseURL() + path, {
+            method: 'POST',
+            headers: this.headers(),
+            body: JSON.stringify(notification),
+        })
+        if (response.status !== 200) {
+            return undefined
+        }
+        return (await this.getJson(response, undefined)) as UserNotification | undefined
+    }
+
+    async markNotificationAsRead(notificationId: string): Promise<boolean> {
+        const path = `/api/v2/notifications/${notificationId}/read`
+        const response = await fetch(this.getBaseURL() + path, {
+            method: 'POST',
+            headers: this.headers(),
+        })
+        return response.status === 200
+    }
+
+    async markAllNotificationsAsRead(): Promise<boolean> {
+        const path = '/api/v2/notifications/read-all'
+        const response = await fetch(this.getBaseURL() + path, {
+            method: 'POST',
+            headers: this.headers(),
+        })
+        return response.status === 200
+    }
+
+    async deleteNotification(notificationId: string): Promise<boolean> {
+        const path = `/api/v2/notifications/${notificationId}`
+        const response = await fetch(this.getBaseURL() + path, {
+            method: 'DELETE',
+            headers: this.headers(),
+        })
+        return response.status === 200
+    }
+}
+
+// UserNotification type
+export interface UserNotification {
+    id: string
+    targetUserId: string
+    actorUserId: string
+    actorName: string
+    type: string
+    cardId: string
+    cardTitle: string
+    boardId: string
+    read: boolean
+    createAt: number
+    updateAt: number
 }
 
 const octoClient = new OctoClient()

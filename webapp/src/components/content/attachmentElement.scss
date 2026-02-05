@@ -1,92 +1,240 @@
+// Trello-style attachment list item
 .FileElement {
     background: rgb(var(--center-channel-bg-rgb));
-    border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
-    min-width: 300px;
-    width: max-content;
-    height: 64px;
-    box-shadow: var(--elevation-1);
+    border-radius: 8px;
+    width: 100%;
+    height: 72px;
     display: flex;
+    flex-direction: row;
+    align-items: center;
     position: relative;
+    overflow: visible;
+    transition: background 0.15s ease;
+    margin-right: 0 !important;
+    
+    &:hover {
+        background: rgba(var(--center-channel-color-rgb), 0.04);
+        
+        .fileElement-delete-download {
+            opacity: 1;
+        }
+    }
+    
+    // Thumbnail container - left side
+    .fileElement-image-preview {
+        width: 96px;
+        height: 56px;
+        min-width: 96px;
+        border-radius: 6px;
+        overflow: hidden;
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        .preview-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: rgba(var(--center-channel-color-rgb), 0.04);
+        }
+        
+        .cover-indicator {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            background: rgba(0, 121, 191, 0.9);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            
+            i {
+                font-size: 10px;
+            }
+        }
+    }
+    
+    // Icon for non-image files - replaces thumbnail
+    .fileElement-icon-division {
+        width: 96px;
+        height: 56px;
+        min-width: 96px;
+        border-radius: 6px;
+        background: rgba(var(--center-channel-color-rgb), 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+    }
+
+    .fileElement-icon {
+        font-size: 28px;
+        color: rgba(var(--center-channel-color-rgb), 0.5);
+    }
+    
+    // File type badge (CLIP, PDF, etc.)
+    .fileElement-type-badge {
+        width: 96px;
+        height: 56px;
+        min-width: 96px;
+        border-radius: 6px;
+        background: rgba(var(--center-channel-color-rgb), 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(var(--center-channel-color-rgb), 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    // File details - right side
+    .fileElement-file-details {
+        flex: 1;
+        min-width: 0;
+        padding: 0 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
+    }
 
     .fileElement-file-name {
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 500;
+        color: rgb(var(--center-channel-color-rgb));
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.4;
+        
+        &:hover {
+            color: #0079bf;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     }
 
     .fileElement-file-ext-and-size {
-        text-transform: uppercase;
-        font-weight: 400;
         font-size: 12px;
-        line-height: 16px;
-        color: rgb(var(--center-channel-color-rgb));
+        font-weight: 400;
+        line-height: 1.4;
+        color: rgba(var(--center-channel-color-rgb), 0.55);
     }
 
     .fileElement-file-uploading {
         font-weight: 400;
         font-size: 12px;
         line-height: 16px;
-        color: rgb(var(--center-channel-color-rgb));
+        color: rgba(var(--center-channel-color-rgb), 0.6);
     }
 
-    .fileElement-icon-division {
-        margin-top: 8px;
-    }
-
-    .fileElement-icon {
-        font-size: 48px;
-        color: rgba(237, 82, 42, 1);
+    // Action buttons - right side
+    .fileElement-delete-download {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity 0.15s ease;
     }
 
     .fileElement-download-btn {
-        display: none;
-        font-size: 20px;
-        color: rgba(var(--center-channel-color-rgb), 0.56);
-        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: rgba(var(--center-channel-color-rgb), 0.5);
+        padding: 6px;
+        border-radius: 4px;
+        transition: all 0.15s ease;
 
         &:hover {
-            background-color: rgba(var(--center-channel-color-rgb), 0.08);
-            border-radius: 5px;
+            background-color: rgba(var(--center-channel-color-rgb), 0.1);
+            color: rgba(var(--center-channel-color-rgb), 0.8);
             cursor: pointer;
         }
     }
 
+    // Menu button
+    .fileElement-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: none;
+        background: transparent;
+        border-radius: 4px;
+        color: rgba(var(--center-channel-color-rgb), 0.5);
+        cursor: pointer;
+        transition: all 0.15s ease;
+        
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.1);
+            color: rgba(var(--center-channel-color-rgb), 0.8);
+        }
+        
+        i {
+            font-size: 18px;
+        }
+    }
+
     .fileElement-menu-icon {
-        display: none;
-        float: right;
+        display: block;
+        
+        .menu-contents {
+            z-index: 9999;
+        }
     }
 
     .delete-menu {
-        display: none;
-        margin-top: -30px;
-    }
-
-    .fileElement-delete-download {
-        position: absolute;
-        display: flex;
-        right: 0;
-    }
-
-    &:hover {
-        .fileElement-download-btn {
-            display: block;
-        }
-
-        .fileElement-menu-icon {
-            display: block;
-        }
-
-        .delete-menu {
-            display: block;
+        margin-top: 0;
+        
+        .menu-contents {
+            z-index: 9999;
         }
     }
 
+    // Cover badge in list
+    .fileElement-cover-badge {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 8px;
+        padding: 2px 6px;
+        background: rgba(0, 121, 191, 0.1);
+        color: #0079bf;
+        border-radius: 3px;
+        font-size: 10px;
+        font-weight: 600;
+        vertical-align: middle;
+
+        i {
+            font-size: 12px;
+        }
+    }
+
+    // Progress bar
     .progress {
         position: absolute;
         bottom: 0;
+        left: 0;
         width: 100%;
-        height: 7px;
+        height: 3px;
         margin-bottom: 0;
         border-radius: 0;
+        background: rgba(var(--center-channel-color-rgb), 0.1);
     }
 
     .progress-bar {
@@ -96,10 +244,243 @@
         line-height: 20px;
         color: #fff;
         text-align: center;
-        background-color: #285ab9;
+        background: linear-gradient(90deg, #0079bf 0%, #026aa7 100%);
     }
 
     .dialog {
         max-width: 550px !important;
+    }
+    
+    // Override for has-preview - keep same layout but with image
+    &.has-preview {
+        height: 72px;
+        flex-direction: row;
+        
+        .fileElement-delete-download {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            box-shadow: none;
+            padding: 0;
+        }
+        
+        .fileElement-image-preview {
+            cursor: pointer;
+            
+            .preview-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                color: white;
+                
+                i {
+                    font-size: 20px;
+                    margin-bottom: 2px;
+                }
+                
+                span {
+                    font-size: 10px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                }
+            }
+            
+            &:hover .preview-overlay {
+                opacity: 1;
+            }
+        }
+    }
+}
+
+// Image Lightbox Styles
+.image-lightbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.92);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    animation: lightbox-fade-in 0.2s ease;
+}
+
+@keyframes lightbox-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    
+    .lightbox-filename {
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        max-width: 300px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .lightbox-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .lightbox-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        
+        i {
+            font-size: 18px;
+        }
+        
+        &:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        &.lightbox-close {
+            background: rgba(255, 59, 48, 0.2);
+            
+            &:hover {
+                background: rgba(255, 59, 48, 0.4);
+            }
+        }
+    }
+    
+    .lightbox-zoom-level {
+        color: white;
+        font-size: 13px;
+        font-weight: 500;
+        min-width: 50px;
+        text-align: center;
+        padding: 0 8px;
+    }
+    
+    .lightbox-divider {
+        width: 1px;
+        height: 24px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 0 8px;
+    }
+}
+
+.lightbox-image-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+    
+    .lightbox-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        user-select: none;
+        border-radius: 4px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+}
+
+.lightbox-footer {
+    padding: 10px 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+// Portal-based attachment menu (rendered to body to avoid overflow issues)
+.attachment-menu-portal {
+    .attachment-menu-content {
+        background: rgb(var(--center-channel-bg-rgb));
+        border: 1px solid rgba(var(--center-channel-color-rgb), 0.16);
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        padding: 6px 0;
+        animation: menuFadeIn 0.15s ease;
+    }
+    
+    @keyframes menuFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .attachment-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        color: rgb(var(--center-channel-color-rgb));
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.15s ease;
+        
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+        }
+        
+        i {
+            font-size: 18px;
+            opacity: 0.6;
+        }
+        
+        &.delete {
+            color: #eb5757;
+            
+            i {
+                opacity: 0.8;
+            }
+            
+            &:hover {
+                background: rgba(235, 87, 87, 0.1);
+            }
+        }
     }
 }

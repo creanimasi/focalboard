@@ -214,6 +214,70 @@ func (s *SQLStore) updateUserPasswordByID(db sq.BaseRunner, userID, password str
 	return nil
 }
 
+func (s *SQLStore) getAllUsers(db sq.BaseRunner) ([]*model.User, error) {
+	query := s.getQueryBuilder(db).
+		Select(
+			"id",
+			"username",
+			"email",
+			"password",
+			"mfa_secret",
+			"auth_service",
+			"auth_data",
+			"create_at",
+			"update_at",
+			"delete_at",
+		).
+		From(s.tablePrefix + "users").
+		Where(sq.Eq{"delete_at": 0}).
+		OrderBy("create_at DESC")
+
+	rows, err := query.Query()
+	if err != nil {
+		s.logger.Error(`getAllUsers ERROR`, mlog.Err(err))
+		return nil, err
+	}
+	defer s.CloseRows(rows)
+
+	users, err := s.usersFromRows(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	// Clear sensitive data
+	for _, user := range users {
+		user.Password = ""
+		user.MfaSecret = ""
+	}
+
+	return users, nil
+}
+
+func (s *SQLStore) deleteUser(db sq.BaseRunner, userID string) error {
+	now := utils.GetMillis()
+
+	query := s.getQueryBuilder(db).Update(s.tablePrefix+"users").
+		Set("delete_at", now).
+		Set("update_at", now).
+		Where(sq.Eq{"id": userID})
+
+	result, err := query.Exec()
+	if err != nil {
+		return err
+	}
+
+	rowCount, err := result.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowCount < 1 {
+		return UserNotFoundError{userID}
+	}
+
+	return nil
+}
+
 func (s *SQLStore) getUsersByTeam(db sq.BaseRunner, _ string, _ string, _, _ bool) ([]*model.User, error) {
 	users, err := s.getUsersByCondition(db, nil, 0)
 	if model.IsErrNotFound(err) {

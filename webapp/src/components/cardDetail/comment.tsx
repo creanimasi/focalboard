@@ -15,6 +15,7 @@ import {getUser} from '../../store/users'
 import {useAppSelector} from '../../store/hooks'
 import Tooltip from '../../widgets/tooltip'
 import GuestBadge from '../../widgets/guestBadge'
+import UserAvatar from '../userAvatar'
 
 import './comment.scss'
 
@@ -38,9 +39,11 @@ const Comment: FC<Props> = (props: Props) => {
             className='Comment comment'
         >
             <div className='comment-header'>
-                <img
+                <UserAvatar
+                    userId={userId}
+                    name={user?.nickname || user?.username}
+                    size='medium'
                     className='comment-avatar'
-                    src={userImageUrl}
                 />
                 <div className='comment-username'>{user?.username}</div>
                 <GuestBadge show={user?.is_guest}/>

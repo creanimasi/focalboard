@@ -588,6 +588,16 @@ func (s *SQLStore) GetUsersList(userIDs []string, showEmail bool, showName bool)
 
 }
 
+func (s *SQLStore) GetAllUsers() ([]*model.User, error) {
+	return s.getAllUsers(s.db)
+
+}
+
+func (s *SQLStore) DeleteUser(userID string) error {
+	return s.deleteUser(s.db, userID)
+
+}
+
 func (s *SQLStore) InsertBlock(block *model.Block, userID string) error {
 	if s.dbType == model.SqliteDBType {
 		return s.insertBlock(s.db, block, userID)
@@ -961,4 +971,30 @@ func (s *SQLStore) UpsertTeamSettings(team model.Team) error {
 func (s *SQLStore) UpsertTeamSignupToken(team model.Team) error {
 	return s.upsertTeamSignupToken(s.db, team)
 
+}
+
+// User Notifications
+
+func (s *SQLStore) CreateUserNotification(notification *model.UserNotification) (*model.UserNotification, error) {
+	return s.createUserNotification(s.db, notification)
+}
+
+func (s *SQLStore) GetUserNotifications(userID string, limit int) ([]*model.UserNotification, error) {
+	return s.getUserNotifications(s.db, userID, limit)
+}
+
+func (s *SQLStore) GetUnreadNotificationCount(userID string) (int, error) {
+	return s.getUnreadNotificationCount(s.db, userID)
+}
+
+func (s *SQLStore) MarkNotificationAsRead(notificationID, userID string) error {
+	return s.markNotificationAsRead(s.db, notificationID, userID)
+}
+
+func (s *SQLStore) MarkAllNotificationsAsRead(userID string) error {
+	return s.markAllNotificationsAsRead(s.db, userID)
+}
+
+func (s *SQLStore) DeleteUserNotification(notificationID, userID string) error {
+	return s.deleteUserNotification(s.db, notificationID, userID)
 }

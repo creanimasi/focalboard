@@ -34,6 +34,11 @@
             line-height: 1;
         }
 
+        // Always show background picker
+        .BoardBackgroundPicker .Button {
+            display: flex;
+        }
+
         &.add-visible:hover {
             .Button {
                 display: flex;

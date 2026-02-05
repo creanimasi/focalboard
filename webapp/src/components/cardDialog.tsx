@@ -30,6 +30,7 @@ import {Permission} from '../constants'
 import BoardPermissionGate from './permissions/boardPermissionGate'
 
 import CardDetail from './cardDetail/cardDetail'
+import CardDetailTrello from './cardDetail/cardDetailTrello'
 import Dialog from './dialog'
 
 import CardActionsMenu from './cardActionsMenu/cardActionsMenu'
@@ -224,11 +225,14 @@ const CardDialog = (props: Props): JSX.Element => {
         )
     }
 
+    // Use Trello-style layout
+    const useTrelloLayout = true
+
     return (
         <>
             <Dialog
                 title={<div/>}
-                className='cardDialog'
+                className={`cardDialog${useTrelloLayout ? ' trello-style' : ''}`}
                 onClose={props.onClose}
                 toolsMenu={!props.readonly && !card?.limited && menu}
                 toolbar={attachBtn()}
@@ -241,7 +245,23 @@ const CardDialog = (props: Props): JSX.Element => {
                         />
                     </div>}
 
-                {card &&
+                {card && useTrelloLayout &&
+                    <CardDetailTrello
+                        board={board}
+                        activeView={activeView}
+                        views={views}
+                        cards={cards}
+                        card={card}
+                        contents={contents}
+                        comments={comments}
+                        attachments={attachments}
+                        readonly={props.readonly}
+                        onClose={props.onClose}
+                        onDelete={deleteBlock}
+                        addAttachment={addElement}
+                    />}
+
+                {card && !useTrelloLayout &&
                     <CardDetail
                         board={board}
                         activeView={activeView}

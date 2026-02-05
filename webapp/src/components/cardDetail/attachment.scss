@@ -3,7 +3,7 @@
     width: 100%;
 
     .attachment-header {
-        display: flex;
+        display: none; // Hidden since parent already shows header
     }
 
     .attachment-plus-btn {
@@ -11,9 +11,10 @@
     }
 
     .attachment-content {
-        padding-bottom: 20px;
         display: flex;
-        overflow-x: auto;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
     }
 
     .attachment-plus-icon {
@@ -27,5 +28,33 @@
         font-weight: 600;
         font-size: 14px;
         line-height: 20px;
+    }
+    
+    // Toggle button for show more/less
+    .attachment-toggle-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        padding: 10px 16px;
+        margin-top: 8px;
+        background: rgba(var(--center-channel-color-rgb), 0.04);
+        border: none;
+        border-radius: 8px;
+        color: rgba(var(--center-channel-color-rgb), 0.7);
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        
+        .CompassIcon {
+            font-size: 18px;
+        }
+        
+        &:hover {
+            background: rgba(var(--center-channel-color-rgb), 0.08);
+            color: rgb(var(--center-channel-color-rgb));
+        }
     }
 }

@@ -1,0 +1,39 @@
+.BoardBackgroundPicker {
+    display: inline-block;
+
+    .preset-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 8px 12px;
+        min-width: 200px;
+    }
+
+    .preset-item {
+        width: 40px;
+        height: 40px;
+        border-radius: 6px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        border: 2px solid transparent;
+
+        &:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        &.selected {
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 2px var(--button-bg);
+        }
+
+        .CompassIcon {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            font-size: 18px;
+        }
+    }
+}

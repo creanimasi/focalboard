@@ -8,6 +8,7 @@ import {Block} from './blocks/block'
 import {Board, BoardMember} from './blocks/board'
 import {OctoUtils} from './octoUtils'
 import {BoardCategoryWebsocketData, Category} from './store/sidebar'
+import {UserNotification} from './octoClient'
 
 // These are outgoing commands to the server
 type WSCommand = {
@@ -29,6 +30,7 @@ export type WSMessage = {
     member?: BoardMember
     timestamp?: number
     categoryOrder?: string[]
+    notification?: UserNotification
 }
 
 export const ACTION_UPDATE_BOARD = 'UPDATE_BOARD'
@@ -46,6 +48,7 @@ export const ACTION_UPDATE_BOARD_CATEGORY = 'UPDATE_BOARD_CATEGORY'
 export const ACTION_UPDATE_SUBSCRIPTION = 'UPDATE_SUBSCRIPTION'
 export const ACTION_UPDATE_CARD_LIMIT_TIMESTAMP = 'UPDATE_CARD_LIMIT_TIMESTAMP'
 export const ACTION_REORDER_CATEGORIES = 'REORDER_CATEGORIES'
+export const ACTION_USER_NOTIFICATION = 'USER_NOTIFICATION'
 
 type WSSubscriptionMsg = {
     action?: string
@@ -80,6 +83,7 @@ type OnErrorHandler = (client: WSClient, e: Event) => void
 type OnConfigChangeHandler = (client: WSClient, clientConfig: ClientConfig) => void
 type OnCardLimitTimestampChangeHandler = (client: WSClient, timestamp: number) => void
 type FollowChangeHandler = (client: WSClient, subscription: Subscription) => void
+type OnNotificationHandler = (client: WSClient, notification: UserNotification) => void
 
 export type ChangeHandlerType = 'block' | 'category' | 'blockCategories' | 'board' | 'boardMembers' | 'categoryOrder'
 
@@ -123,6 +127,7 @@ class WSClient {
     onError: OnErrorHandler[] = []
     onConfigChange: OnConfigChangeHandler[] = []
     onCardLimitTimestampChange: OnCardLimitTimestampChangeHandler[] = []
+    onNotification: OnNotificationHandler[] = []
     onFollowBlock: FollowChangeHandler = () => {}
     onUnfollowBlock: FollowChangeHandler = () => {}
     private notificationDelay = 100
@@ -326,6 +331,17 @@ class WSClient {
         }
     }
 
+    addOnNotification(handler: OnNotificationHandler): void {
+        this.onNotification.push(handler)
+    }
+
+    removeOnNotification(handler: OnNotificationHandler): void {
+        const index = this.onNotification.indexOf(handler)
+        if (index !== -1) {
+            this.onNotification.splice(index, 1)
+        }
+    }
+
     open(): void {
         if (this.client !== null) {
             // configure the Mattermost websocket client callbacks
@@ -489,6 +505,9 @@ class WSClient {
                 case ACTION_REORDER_CATEGORIES:
                     this.updateHandler(message)
                     break
+                case ACTION_USER_NOTIFICATION:
+                    this.notificationHandler(message)
+                    break
                 default:
                     Utils.logError(`Unexpected action: ${message.action}`)
                 }
@@ -544,6 +563,18 @@ class WSClient {
 
         const handler = message.subscription.deleteAt ? this.onUnfollowBlock : this.onFollowBlock
         handler(this, message.subscription)
+    }
+
+    notificationHandler(message: WSMessage): void {
+        Utils.log('notificationHandler: received user notification')
+
+        if (!message.notification) {
+            return
+        }
+
+        for (const handler of this.onNotification) {
+            handler(this, message.notification)
+        }
     }
 
     setOnAppVersionChangeHandler(fn: (versionHasChanged: boolean) => void): void {

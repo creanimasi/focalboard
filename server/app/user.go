@@ -92,3 +92,23 @@ func (a *App) SanitizeProfile(user *model.User, isAdmin bool) {
 	}
 	user.Sanitize(options)
 }
+
+// GetAllUsers returns all registered users (for admin panel)
+func (a *App) GetAllUsers() ([]*model.User, error) {
+	return a.store.GetAllUsers()
+}
+
+// UpdateUser updates a user
+func (a *App) UpdateUser(user *model.User) (*model.User, error) {
+	return a.store.UpdateUser(user)
+}
+
+// UpdateUserPasswordByID updates a user's password by user ID
+func (a *App) UpdateUserPasswordByID(userID string, password string) error {
+	return a.store.UpdateUserPasswordByID(userID, password)
+}
+
+// DeleteUser soft deletes a user
+func (a *App) DeleteUser(userID string) error {
+	return a.store.DeleteUser(userID)
+}

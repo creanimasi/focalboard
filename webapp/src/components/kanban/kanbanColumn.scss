@@ -1,5 +1,47 @@
-.octo-board-column {
+// Trello-style column colors - must use .Kanban parent for specificity
+.Kanban .octo-board-column {
     &.dragover {
-        background-color: rgba(128, 192, 255, 0.15);
+        background-color: rgba(0, 121, 191, 0.15) !important;
+    }
+
+    // Column colors - solid background with rounded corners
+    &.column-propColorDefault {
+        background-color: rgba(var(--center-channel-color-rgb), 0.08) !important;
+    }
+
+    &.column-propColorGray {
+        background-color: rgba(179, 186, 197, 0.4) !important;
+    }
+
+    &.column-propColorBrown {
+        background-color: rgba(210, 144, 52, 0.3) !important;
+    }
+
+    &.column-propColorOrange {
+        background-color: rgba(255, 159, 26, 0.3) !important;
+    }
+
+    &.column-propColorYellow {
+        background-color: rgba(242, 214, 0, 0.3) !important;
+    }
+
+    &.column-propColorGreen {
+        background-color: rgba(97, 189, 79, 0.3) !important;
+    }
+
+    &.column-propColorBlue {
+        background-color: rgba(0, 121, 191, 0.3) !important;
+    }
+
+    &.column-propColorPurple {
+        background-color: rgba(195, 119, 224, 0.3) !important;
+    }
+
+    &.column-propColorPink {
+        background-color: rgba(255, 120, 203, 0.3) !important;
+    }
+
+    &.column-propColorRed {
+        background-color: rgba(235, 90, 70, 0.3) !important;
     }
 }

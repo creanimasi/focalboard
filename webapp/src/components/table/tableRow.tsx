@@ -167,7 +167,6 @@ const TableRow = (props: Props) => {
                 ref={(ref) => columnResize.updateRef(card.id, Constants.titleColumnId, ref)}
             >
                 <div className='octo-icontitle'>
-                    <div className='octo-icon'>{card.fields.icon}</div>
                     <Editable
                         ref={titleRef}
                         value={title}

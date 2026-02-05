@@ -1,0 +1,156 @@
+.ViewHeaderMemberFilter {
+    display: inline-flex;
+    align-items: center;
+}
+
+.member-filter-dropdown {
+    width: 280px;
+    background: rgb(var(--center-channel-bg-rgb));
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(var(--center-channel-color-rgb), 0.08);
+    overflow: hidden;
+    
+    .dropdown-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        
+        .dropdown-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: rgb(var(--center-channel-color-rgb));
+        }
+        
+        .clear-btn {
+            border: none;
+            background: none;
+            color: #0079bf;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.15s ease;
+            
+            &:hover {
+                background: rgba(0, 121, 191, 0.1);
+            }
+        }
+    }
+    
+    .member-search {
+        width: 100%;
+        padding: 10px 14px;
+        border: none;
+        border-bottom: 1px solid rgba(var(--center-channel-color-rgb), 0.08);
+        font-size: 13px;
+        outline: none;
+        background: transparent;
+        color: rgb(var(--center-channel-color-rgb));
+        
+        &::placeholder {
+            color: rgba(var(--center-channel-color-rgb), 0.5);
+        }
+    }
+    
+    .member-list {
+        max-height: 280px;
+        overflow-y: auto;
+        padding: 8px;
+        
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            background: rgba(var(--center-channel-color-rgb), 0.15);
+            border-radius: 3px;
+            
+            &:hover {
+                background: rgba(var(--center-channel-color-rgb), 0.25);
+            }
+        }
+        
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            
+            &:hover {
+                background: rgba(var(--center-channel-color-rgb), 0.06);
+            }
+            
+            &.selected {
+                background: rgba(0, 121, 191, 0.08);
+                
+                .member-avatar {
+                    box-shadow: 0 0 0 2px #0079bf;
+                }
+            }
+            
+            .member-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: 600;
+                font-size: 12px;
+                flex-shrink: 0;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                transition: box-shadow 0.15s ease;
+            }
+            
+            .member-info {
+                flex: 1;
+                min-width: 0;
+                
+                .member-name {
+                    display: block;
+                    font-size: 13px;
+                    font-weight: 500;
+                    color: rgb(var(--center-channel-color-rgb));
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                
+                .member-username {
+                    display: block;
+                    font-size: 11px;
+                    color: rgba(var(--center-channel-color-rgb), 0.5);
+                    margin-top: 1px;
+                }
+            }
+            
+            .check-icon {
+                color: #0079bf;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: rgba(var(--center-channel-color-rgb), 0.5);
+            
+            p {
+                margin: 0;
+                font-size: 13px;
+            }
+        }
+    }
+}

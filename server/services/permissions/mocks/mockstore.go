@@ -78,3 +78,18 @@ func (mr *MockStoreMockRecorder) GetMemberForBoard(arg0, arg1 interface{}) *gomo
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMemberForBoard", reflect.TypeOf((*MockStore)(nil).GetMemberForBoard), arg0, arg1)
 }
+
+// GetAllUsers mocks base method.
+func (m *MockStore) GetAllUsers() ([]*model.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAllUsers")
+	ret0, _ := ret[0].([]*model.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAllUsers indicates an expected call of GetAllUsers.
+func (mr *MockStoreMockRecorder) GetAllUsers() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAllUsers", reflect.TypeOf((*MockStore)(nil).GetAllUsers))
+}

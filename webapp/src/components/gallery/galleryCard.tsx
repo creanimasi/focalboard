@@ -134,7 +134,6 @@ const GalleryCard = (props: Props) => {
                     </CardDetailProvider>}
                 {props.visibleTitle &&
                     <div className='gallery-title'>
-                        { card.fields.icon ? <div className='octo-icon'>{card.fields.icon}</div> : undefined }
                         <div
                             key='__title'
                             className='octo-titletext'
