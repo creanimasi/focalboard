@@ -1,5 +1,5 @@
 {
-	"serverRoot": "http://localhost:8182",
+	"serverRoot": "https://board.creanimasi.com",
 	"port": 8182,
 	"dbtype": "postgres",
 	"dbconfig": "postgres://focalboard:changeme@postgres:5432/focalboard?sslmode=disable",
