@@ -42,8 +42,9 @@ RUN apk add --no-cache ca-certificates tzdata
 # Copy server binary
 COPY --from=backend-build /build/focalboard-server ./bin/
 
-# Copy frontend assets
+# Copy frontend assets (pack + static files)
 COPY --from=frontend-build /webapp/pack ./webapp/pack
+COPY --from=frontend-build /webapp/static ./webapp/static
 
 # Copy config file (will be overridden by environment variables)
 COPY config.docker.json ./config.json
