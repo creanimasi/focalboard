@@ -4,6 +4,7 @@ import React, {FC} from 'react'
 
 import 'emoji-mart/css/emoji-mart.css'
 import {Picker, BaseEmoji} from 'emoji-mart'
+import data from 'emoji-mart/data/all.json'
 
 import {Utils} from '../utils'
 import './emojiPicker.scss'
@@ -20,6 +21,7 @@ const EmojiPicker: FC<Props> = (props: Props): JSX.Element => (
         onClick={(e) => e.stopPropagation()}
     >
         <Picker
+            data={data}
             onSelect={(emoji: BaseEmoji) => props.onSelect(emoji.native)}
             backgroundImageFn={() => Utils.buildURL(emojiSpirit, true)}
         />
