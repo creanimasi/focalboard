@@ -1,0 +1,58 @@
+# ============================================
+# Custom Focalboard v8.0.0 - Production Build
+# ============================================
+
+# Stage 1: Build Frontend
+FROM node:16-alpine AS frontend-build
+
+# Install build dependencies
+RUN apk add --no-cache python3 make g++ autoconf automake libtool nasm zlib-dev libpng-dev
+
+WORKDIR /webapp
+COPY webapp/package.json webapp/package-lock.json ./
+RUN npm ci --legacy-peer-deps
+
+COPY webapp/ ./
+RUN npm run pack
+
+# Stage 2: Build Backend
+FROM golang:1.21-alpine AS backend-build
+
+WORKDIR /build
+RUN apk add --no-cache git gcc musl-dev
+
+# Copy go modules files
+COPY server/go.mod server/go.sum ./
+RUN go mod download
+
+# Copy server source
+COPY server/ ./
+
+# Build server binary
+RUN go build -o focalboard-server -ldflags="-s -w" ./main
+
+# Stage 3: Final Production Image
+FROM alpine:latest
+
+WORKDIR /opt/focalboard
+
+# Install runtime dependencies
+RUN apk add --no-cache ca-certificates tzdata
+
+# Copy server binary
+COPY --from=backend-build /build/focalboard-server ./bin/
+
+# Copy frontend assets
+COPY --from=frontend-build /webapp/pack ./webapp/pack
+
+# Create directories for data
+RUN mkdir -p /opt/focalboard/data /opt/focalboard/files
+
+# Expose port
+EXPOSE 8182
+
+# Environment variables
+ENV FOCALBOARD_PORT=8182
+
+# Start server
+CMD ["/opt/focalboard/bin/focalboard-server"]
