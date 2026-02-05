@@ -1,0 +1,15 @@
+{
+	"serverRoot": "http://localhost:8182",
+	"port": 8182,
+	"dbtype": "postgres",
+	"dbconfig": "postgres://focalboard:changeme@postgres:5432/focalboard?sslmode=disable",
+	"useSSL": false,
+	"webpath": "./webapp/pack",
+	"filesdriver": "local",
+	"filespath": "./files",
+	"telemetry": false,
+	"enablePublicSharedBoards": false,
+	"enableOpenRegistration": true,
+	"session_expire_time": 2592000,
+	"session_refresh_time": 18000
+}
