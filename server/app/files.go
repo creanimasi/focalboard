@@ -151,6 +151,25 @@ func getFileInfoID(fileName string) string {
 }
 
 func (a *App) GetFileReader(teamID, rootID, filename string) (filestore.ReadCloseSeeker, error) {
+	// Try to get file info from database first to use correct path
+	fileInfo, err := a.GetFileInfo(filename)
+	if err == nil && fileInfo != nil && fileInfo.Path != "" && fileInfo.Path != emptyString {
+		// Use path from database (supports v3 custom storage)
+		exists, err := a.filesBackend.FileExists(fileInfo.Path)
+		if err != nil {
+			return nil, err
+		}
+		if exists {
+			reader, err := a.filesBackend.Reader(fileInfo.Path)
+			if err != nil {
+				return nil, err
+			}
+			return reader, nil
+		}
+		// Path in DB but file doesn't exist at that location - fall through to legacy logic
+	}
+	
+	// Fallback to legacy path construction
 	filePath := filepath.Join(teamID, rootID, filename)
 	exists, err := a.filesBackend.FileExists(filePath)
 	if err != nil {
