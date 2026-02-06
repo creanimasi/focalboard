@@ -29,6 +29,7 @@ function makeCommonConfig() {
                     use: {
                         loader: 'ts-loader',
                         options: {
+                            transpileOnly: true,
                             getCustomTransformers: {
                                 before: [
                                     tsTransformer.transform({
