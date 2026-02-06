@@ -9,3 +9,6 @@ website/
 linux/
 go.work
 go.work.sum
+backups/
+*.zip
+*.tar.gz
